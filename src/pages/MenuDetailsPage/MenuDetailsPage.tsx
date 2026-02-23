@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 import { Card, CardActions, CardContent, CardHeader, Container, Paper, Stack, Typography } from "@mui/material";
 import { formatDate } from "../../utils/formatDate";
 
-export default function MenuListPage() {
+export default function MenuDetailsPage() {
 
     const [menu, setMenu] = useState<Menu>();
 
