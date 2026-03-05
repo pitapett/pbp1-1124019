@@ -1,12 +1,13 @@
-import { Box, Container, Grid, Paper, Stack} from "@mui/material";
+import { Box, Container, Grid, IconButton, Paper, Stack } from "@mui/material";
 import { useEffect, useState } from "react";
 import type { Menu, MenuListResponse } from "../../types";
 import { MenuListPageCard } from "./MenuListPageCard";
-import { Title } from "@mui/icons-material";
+import { Add } from "@mui/icons-material";
+import { Link } from "react-router";
 
 export default function MenuListPage() {
     const [menus, setMenus] = useState<Menu[]>([])
-
+    
     useEffect(() => {
         async function loadMenus() {
             try {
@@ -18,7 +19,6 @@ export default function MenuListPage() {
 
                 const data = await response.json() as MenuListResponse;
                 setMenus(data);
-
             } catch {
                 console.log('error occured')
             }
@@ -33,7 +33,7 @@ export default function MenuListPage() {
             <Paper>
                 <Stack>
                     <Box justifyContent='center' display='flex'>
-                        <Title>Menu</Title>
+                        <h1>Menu</h1>
                     </Box>
                     <Grid container spacing={2}>
                         {menus.map(record =>
@@ -41,7 +41,16 @@ export default function MenuListPage() {
                                 <MenuListPageCard menu={record} />
                             </Grid>
                         )}
+                        <Grid size={"auto"} justifyContent={"center"} marginBlock={"auto"} paddingInline={'20px'}>
+                            <Link to={'/create-menu'}>
+                                <IconButton aria-label="Add Menu">
+                                    <Add />
+                                </IconButton>
+                            </Link>
+
+                        </Grid>
                     </Grid>
+
                 </Stack>
             </Paper>
         </Box>

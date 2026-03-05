@@ -1,14 +1,39 @@
 import { useEffect, useState } from "react";
 import type { Menu, MenuResponse } from "../../types";
-import { useParams } from "react-router-dom";
-import { Card, CardActions, CardContent, CardHeader, Container, Paper, Stack, Typography } from "@mui/material";
+import { useParams, Link } from "react-router-dom";
+import { Alert, Card, CardActions, CardContent, CardHeader, Container, IconButton, Paper, Snackbar, Stack, Typography } from "@mui/material";
 import { formatDate } from "../../utils/formatDate";
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
+
+
+
 
 export default function MenuDetailsPage() {
-
     const [menu, setMenu] = useState<Menu>();
-
     const { id } = useParams();
+
+    const handleDelete = async (menuId: string) => {
+        // 1. (Optional) Ask for confirmation
+        if (!window.confirm("Are you sure you want to delete this item?")) return;
+
+        try {
+            const response = await fetch(`/api/delete-menu/${menuId}`, {
+                method: 'DELETE',
+
+            });
+
+            if (response.ok) {
+                alert("sucessfully deleted")
+
+            } else {
+                alert("failed to delete")
+            }
+        } catch (error) {
+            alert("error")
+        }
+    };
+
     useEffect(() => {
         async function loadMenu() {
             try {
@@ -26,6 +51,8 @@ export default function MenuDetailsPage() {
         }
         loadMenu();
     }, [id])
+
+
 
     return <Container>
         <Stack py={2}>
@@ -47,9 +74,22 @@ export default function MenuDetailsPage() {
                                 price: {menu.harga}
                                 <br />
                             </Typography>
+
+                            <Link to={`/menu-update/${menu.id}`}>
+                                <IconButton>
+                                    <EditIcon></EditIcon>
+                                </IconButton>
+                            </Link>
+
+                            <IconButton aria-label="delete"
+                                color="error"
+                                onClick={() => handleDelete(menu.id)}>
+                                <DeleteIcon></DeleteIcon>
+                            </IconButton>
+
+
                         </CardContent>
-                        <CardActions disableSpacing>
-                        </CardActions>
+                        <CardActions disableSpacing />
                     </Card>}
                 </Stack>
             </Paper>
@@ -57,3 +97,4 @@ export default function MenuDetailsPage() {
     </Container>
 
 }
+
